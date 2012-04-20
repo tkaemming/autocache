@@ -4,4 +4,4 @@ install-dev:
 test: install-dev
 	nosetests --verbose
 
-.PHONY: test
+.PHONY: install-dev test

@@ -1,3 +1,5 @@
+from nose import with_setup
+
 import autocache
 
 
@@ -19,13 +21,19 @@ class SimpleCacheBackend(CacheBackend):
     def set(self, key, value):
         self.values[key] = value
 
+    def clear(self):
+        del self.values
+        self.values = {}
 
+
+cache = SimpleCacheBackend()
+
+
+@with_setup(cache.clear)
 def test_backend():
     """
     Test basic cache backend interface compatibility.
     """
-    cache = SimpleCacheBackend()
-
     @autocache.cached(backend=cache)
     def foo(x):
         foo.counter += 1
@@ -71,6 +79,31 @@ def test_backend():
     bar(2)
     assert len(cache.values) == 4
     assert bar.counter == 2
+
+
+@with_setup(cache.clear)
+def test_bytecode_versioning():
+    """
+    Tests bytecode versioning to ensure functions with the same name but
+    different implementations are not cached with the same hashes.
+    """
+    assert len(cache.values) == 0  # sanity check
+
+    @autocache.cached(backend=cache)
+    def foo(x):
+        return x
+
+    result = foo(1)
+    assert result == 1
+    assert len(cache.values) == 1
+
+    @autocache.cached(backend=cache)
+    def foo(x):
+        return x + 1
+
+    result = foo(1)
+    assert result == 2
+    assert len(cache.values) == 2
 
 
 def test_argument_variations():

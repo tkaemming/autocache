@@ -1,13 +1,4 @@
 #!/usr/bin/env python
-"""
-Self-versioning and argument-hashing cache decorator for deterministic functions.
-Designed to be extensible and API-compliant with Django and Flask cache backends.
-
-For examples and caveats, see the bottom of the file.
-
-Ted Kaemming: https://github.com/tkaemming
-Mike Tigas: https://github.com/mtigas
-"""
 import functools
 import hashlib
 import inspect

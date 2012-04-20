@@ -10,6 +10,7 @@ Mike Tigas: https://github.com/mtigas
 """
 import functools
 import hashlib
+import inspect
 
 
 def generate_function_key(fn):
@@ -21,16 +22,25 @@ def generate_function_key(fn):
     return hashlib.md5(fn.func_code.co_code).hexdigest()
 
 
-def generate_unique_key(*args, **kwargs):
+def convert_dict_to_tuple(d):
+    """
+    Converts an unhashable dict to a hashable tuple, sorted by key.
+    """
+    return tuple(sorted(d.items(), key=lambda item: item[0]))
+
+
+def generate_unique_key(fn, *args, **kwargs):
     """
     Generates a unique key based on the hashed values of all of the passed
     arguments. This makes a pretty bold assumption that the hash() function
     is deterministic, which is (probably) implementation specific.
     """
-    hashed_args = ['%s' % hash(arg) for arg in args]
-    hashed_kwargs = ['%s ' % hash((key, value)) for (key, value) in kwargs.items()]
-    # this is md5 hashed again to avoid the key growing too large for memcached
-    return hashlib.md5(':'.join(hashed_args + hashed_kwargs)).hexdigest()
+    arguments = inspect.getcallargs(fn, *args, **kwargs)
+    arguments['kwargs'] = convert_dict_to_tuple(arguments['kwargs'])
+    arguments = convert_dict_to_tuple(arguments)
+    # This is passed back through MD5 to ensure that the key does not grow too
+    # long for caching backends with a limited key size (read: memcached.)
+    return hashlib.md5(':'.join(map(str, map(hash, arguments)))).hexdigest()
 
 
 def cached(backend, **kwargs):
@@ -57,7 +67,7 @@ def cached(backend, **kwargs):
 
         @functools.wraps(fn)
         def inner(*args, **kwargs):
-            unique_key = '%s:%s' % (key, key_generator(*args, **kwargs))
+            unique_key = '%s:%s' % (key, key_generator(fn, *args, **kwargs))
 
             # If the value is `None` from the cache, then generate the real
             # value and store it.

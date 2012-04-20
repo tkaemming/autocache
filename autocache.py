@@ -36,7 +36,8 @@ def generate_unique_key(fn, *args, **kwargs):
     is deterministic, which is (probably) implementation specific.
     """
     arguments = inspect.getcallargs(fn, *args, **kwargs)
-    arguments['kwargs'] = convert_dict_to_tuple(arguments['kwargs'])
+    if 'kwargs' in arguments:
+        arguments['kwargs'] = convert_dict_to_tuple(arguments['kwargs'])
     arguments = convert_dict_to_tuple(arguments)
     # This is passed back through MD5 to ensure that the key does not grow too
     # long for caching backends with a limited key size (read: memcached.)

@@ -26,6 +26,10 @@ Provides facilities for memozing function calls using pluggable cache backends.
   generation function, or convert the values into a hashable type before calling
   the cache-wrapped function.*
 
+## Installation
+
+TODO
+
 ## Usage
 
 For example, caching a function with Django's cache backend:

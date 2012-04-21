@@ -11,7 +11,7 @@ as the arguments (including `*args`/`**kwargs`) passed to the cached function.
 * Implicit versioning of cache keys based on introspection of generated
   bytecode -- no need to develop your own versioning or cache key naming schemes,
 * Generation of cache keys from hashed argument values, safe to use with
-  argument unpacking (`\*args`, `\*\*kwargs`) and complex hashable types,
+  argument unpacking (`*args`, `**kwargs`) and complex hashable types,
 * API compliant with [Django](https://docs.djangoproject.com/en/dev/topics/cache/)
   and [Flask](http://flask.pocoo.org/docs/patterns/caching/), and simple to
   create your own cache backends if your cache backend of choice is not already

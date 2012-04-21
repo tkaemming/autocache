@@ -40,6 +40,8 @@ TODO
 
 ### autocache.cached(backend, \*\*kwargs)
 
+**Keyword arguments:**
+
 * **key:** use a user-defined cache key (not versioned) instead of hashing the
   function's bytecode
 * **key_generator:** use a user-defined cache key generator instead of using
@@ -101,8 +103,8 @@ def foo(x):
 ### Writing your own cache backend
 
 To implement a cache backend, just create a class that supports the following
-interface, and an instance of this object as the `backend` keyword argument of
-the `cached` decorator:
+interface, and pass an instance of this object as the `backend` keyword argument
+of the `cached` decorator:
 
 ```python
 class CacheBackend(object):

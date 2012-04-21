@@ -26,7 +26,7 @@ def source_hash(function, hash=md5):
     """
     Returns the hashed source for the provided callable.
     """
-    return hash(inspect.get_source(function))
+    return hash(inspect.getsource(function))
 
 
 # Argument Hashing

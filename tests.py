@@ -2,7 +2,7 @@ from nose import with_setup
 
 import autocache
 from autocache.backends import SimpleCacheBackend
-from autocache.hashing import argument_hash
+from autocache.hashing import argument_hash, bytecode_hash, source_hash
 
 
 cache = SimpleCacheBackend()
@@ -82,6 +82,24 @@ def test_backend():
     baz(1)
     assert baz.counter == 0
     assert len(cache.values) == 4
+
+
+def test_callable_hashing():
+    def foo(x):
+        return x
+
+    def bar(x):
+        return x
+
+    # assert runtime determinism
+    assert bytecode_hash(foo) == bytecode_hash(foo)
+    assert source_hash(foo) == source_hash(foo)
+
+    # different functions with the same implementation will have the same hash
+    assert bytecode_hash(foo) == bytecode_hash(bar)
+
+    # but not for source hashing -- the names are different
+    assert source_hash(foo) != source_hash(bar)
 
 
 @with_setup(cache.clear)

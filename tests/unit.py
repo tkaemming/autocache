@@ -1,4 +1,5 @@
 from autocache.hashing import argument_hash, bytecode_hash, source_hash
+from autocache.utils import convert_dict_to_tuple
 
 
 def test_callable_hashing():
@@ -37,6 +38,8 @@ def test_argument_variations():
         argument_hash(foo, 1, 2, 3, 4, a=1, b=2, c=3),
         argument_hash(foo, 1, 2, 3, 4, b=2, a=1, c=3),
         argument_hash(foo, 1, 2, 3, 4, b=2, c=3, a=1),
+        argument_hash(foo, a=1, b=2, c=3, *(1, 2, 3, 4)),
+        argument_hash(foo, 1, 2, *(3, 4), **{'a': 1, 'b': 2, 'c': 3}),
     )
 
     check(
@@ -45,3 +48,14 @@ def test_argument_variations():
         argument_hash(foo, baz=2, bar=1),
         argument_hash(foo, 1, baz=2)
     )
+
+
+def test_dictionary_conversion():
+    """
+    Test converting dictionaries to tuples and ensuring proper key order.
+    """
+    assert convert_dict_to_tuple({}) == ()
+
+    expected = (('a', 1), ('b', 2))
+    assert convert_dict_to_tuple({'a': 1, 'b': 2}) == expected
+    assert convert_dict_to_tuple({'b': 2, 'a': 1}) == expected

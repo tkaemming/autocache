@@ -1,3 +1,6 @@
+install:
+	python setup.py install
+
 install-dev:
 	pip install -qr requirements.development.txt
 
@@ -8,4 +11,4 @@ check: install-dev
 test: install-dev
 	nosetests --verbose
 
-.PHONY: check install-dev test
+.PHONY: check install install-dev test

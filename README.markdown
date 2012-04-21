@@ -34,7 +34,9 @@ as the arguments (including `*args`/`**kwargs`) passed to the cached function.
 
 ## Installation
 
-TODO
+To install from the git repository:
+
+    pip install -e "git://github.com/tkaemming/autocache.git#egg=autocache"
 
 ## Usage
 

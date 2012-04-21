@@ -2,7 +2,6 @@ from nose import with_setup
 
 import autocache
 from autocache.backends import SimpleCacheBackend
-from autocache.hashing import argument_hash, bytecode_hash, source_hash
 
 
 cache = SimpleCacheBackend()
@@ -68,11 +67,11 @@ def test_backend():
     baz = autocache.cached(backend=cache)(original_baz)
     baz.counter = 0
 
+    # The cache will not grow, since the method signature and the bytecode are
+    # identical, and it will actually use the cached value from `foo`! Example:
+
     assert original_baz.func_code.co_code == original_foo.func_code.co_code
     assert original_baz.func_code.co_code != original_bar.func_code.co_code
-
-    # The cache will not grow, since the method signature and the bytecode are
-    # identical, and it will actually use the cached value from `foo`!
 
     # This also demonstrates that the function really should have no side
     # effects if you're going to be caching the result value, and that the
@@ -84,28 +83,10 @@ def test_backend():
     assert len(cache.values) == 4
 
 
-def test_callable_hashing():
-    def foo(x):
-        return x
-
-    def bar(x):
-        return x
-
-    # assert runtime determinism
-    assert bytecode_hash(foo) == bytecode_hash(foo)
-    assert source_hash(foo) == source_hash(foo)
-
-    # different functions with the same implementation will have the same hash
-    assert bytecode_hash(foo) == bytecode_hash(bar)
-
-    # but not for source hashing -- the names are different
-    assert source_hash(foo) != source_hash(bar)
-
-
 @with_setup(cache.clear)
 def test_bytecode_versioning():
     """
-    Tests bytecode versioning to ensure functions with the same name but
+    Test bytecode versioning to ensure functions with the same name but
     different implementations are not cached with the same hashes.
     """
     assert len(cache.values) == 0  # sanity check
@@ -125,28 +106,3 @@ def test_bytecode_versioning():
     result = foo(1)
     assert result == 2
     assert len(cache.values) == 2
-
-
-def test_argument_variations():
-    """
-    Test to ensure that permutations of argument order and/or argument naming
-    all reduce to the identical unique hash for the same invocation.
-    """
-    def foo(bar, baz, *args, **kwargs):
-        pass
-
-    def check(*keys):
-        assert len(set(keys)) == 1
-
-    check(
-        argument_hash(foo, 1, 2, 3, 4, a=1, b=2, c=3),
-        argument_hash(foo, 1, 2, 3, 4, b=2, a=1, c=3),
-        argument_hash(foo, 1, 2, 3, 4, b=2, c=3, a=1),
-    )
-
-    check(
-        argument_hash(foo, 1, 2),
-        argument_hash(foo, bar=1, baz=2),
-        argument_hash(foo, baz=2, bar=1),
-        argument_hash(foo, 1, baz=2)
-    )

@@ -9,6 +9,6 @@ check: install-dev
 	pep8 --repeat --show-source ./
 
 test: install-dev
-	nosetests --verbose
+	nosetests --verbose tests/*.py
 
 .PHONY: check install install-dev test

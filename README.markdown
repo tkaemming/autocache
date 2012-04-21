@@ -1,6 +1,8 @@
 # autocache
 
 Provides facilities for memozing function calls using pluggable cache backends.
+Cache keys are (by default) automatically generated based on the function's
+bytecode (along with the `*args`/`**kwargs` that the function receives).
 
 ## Features
 
@@ -26,7 +28,16 @@ Provides facilities for memozing function calls using pluggable cache backends.
   generation function, or convert the values into a hashable type before calling
   the cache-wrapped function.*
 
-## Usage
+## autocache.cached(backend, \*\*kwargs)
+
+* **key:** use a user-defined cache key (not versioned) instead of hashing the
+  function's bytecode
+* **key_generator:** use a user-defined cache key generator instead of using
+  `__hash__` on the args/kwargs passed to the callable
+* **set_kwargs:** keyword arguments passed to the cache backend's `set` method,
+  so you can pass timeouts, etc. when setting cached values
+
+### Example use
 
 For example, caching a function with Django's cache backend:
 
@@ -43,8 +54,8 @@ For example, caching a function with Django's cache backend:
     # This will be served directly from cache.
     expensive_function(10)
 
-    # This will be invoked, and the result will be stored in cache, separate of
-    # the previous invocation where `x = 10`.
+    # This will be invoked, and the result will be stored in the cache
+    # as a new value (since `x=100` in this case)
     expensive_function(100)
 
 ### Using a user-defined base key
@@ -62,6 +73,18 @@ TODO - Providing cache timeout values, etc
 ### Writing your own cache backend
 
 TODO
+
+## Contributing — Quickstart
+
+    # optionally add "-p /usr/local/bin/pypy " argument if you have
+    # pypy installed and want to use it
+    virtualenv --no-site-packages autocache
+    cd autocache
+    echo "export PIP_RESPECT_VIRTUALENV=true" >> bin/activate
+    source bin/activate
+    git clone git://github.com/tkaemming/autocache.git repo
+    cd repo
+    make test
 
 ## License
 

@@ -1,29 +1,8 @@
 from nose import with_setup
 
 import autocache
-
-
-class CacheBackend(object):
-    def get(self, key, fallback=None):
-        raise NotImplementedError
-
-    def set(self, key, value):
-        raise NotImplementedError
-
-
-class SimpleCacheBackend(CacheBackend):
-    def __init__(self):
-        self.values = {}
-
-    def get(self, key, fallback=None):
-        return self.values.get(key, fallback)
-
-    def set(self, key, value):
-        self.values[key] = value
-
-    def clear(self):
-        del self.values
-        self.values = {}
+from autocache.backends import SimpleCacheBackend
+from autocache.hashing import argument_hash
 
 
 cache = SimpleCacheBackend()
@@ -142,14 +121,14 @@ def test_argument_variations():
         assert len(set(keys)) == 1
 
     check(
-        autocache.generate_unique_key(foo, 1, 2, 3, 4, a=1, b=2, c=3),
-        autocache.generate_unique_key(foo, 1, 2, 3, 4, b=2, a=1, c=3),
-        autocache.generate_unique_key(foo, 1, 2, 3, 4, b=2, c=3, a=1),
+        argument_hash(foo, 1, 2, 3, 4, a=1, b=2, c=3),
+        argument_hash(foo, 1, 2, 3, 4, b=2, a=1, c=3),
+        argument_hash(foo, 1, 2, 3, 4, b=2, c=3, a=1),
     )
 
     check(
-        autocache.generate_unique_key(foo, 1, 2),
-        autocache.generate_unique_key(foo, bar=1, baz=2),
-        autocache.generate_unique_key(foo, baz=2, bar=1),
-        autocache.generate_unique_key(foo, 1, baz=2)
+        argument_hash(foo, 1, 2),
+        argument_hash(foo, bar=1, baz=2),
+        argument_hash(foo, baz=2, bar=1),
+        argument_hash(foo, 1, baz=2)
     )

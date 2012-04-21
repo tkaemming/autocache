@@ -6,7 +6,7 @@ install-dev:
 
 check: install-dev
 	find . -name \*.py -not -path \*tests\* | xargs pyflakes
-	pep8 --repeat ./
+	pep8 --repeat --show-source ./
 
 test: install-dev
 	nosetests --verbose

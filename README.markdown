@@ -88,7 +88,7 @@ TODO
 
 ## License
 
-MIT Licensed, see `LICENSE.markdown` for the full text.
+MIT Licensed, see `LICENSE` for the full text.
 
 ## Authors
 

@@ -38,8 +38,9 @@ as the arguments (including `*args`/`**kwargs`) passed to the cached function.
   deterministic (their hash value evaluates to their `id()` -- in other words,
   their memory address) which can at worst result in cache misses, and at worst
   result in hash collisions and invalid results. Please take the time to
-  understand the `__hash__` implementation of argument types that you may be
-  passed to your function.
+  understand the `__hash__` implementation of argument types that may be
+  passed to your cached functions, and perhaps consider writing your own
+  decorator that implements type checking to increase safety.
 
 ## Installation
 

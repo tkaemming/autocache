@@ -92,5 +92,5 @@ MIT Licensed, see `LICENSE` for the full text.
 
 ## Authors
 
-Ted Kaemming: <https://github.com/tkaemming>
-Mike Tigas: <https://github.com/mtigas>
+* Ted Kaemming: <https://github.com/tkaemming>
+* Mike Tigas: <https://github.com/mtigas>

@@ -2,6 +2,8 @@ from nose import with_setup
 
 import autocache
 from autocache.backends import SimpleCacheBackend
+from autocache.decorators import bytecode_cached, source_cached
+from autocache.hashing import source_hash
 
 
 cache = SimpleCacheBackend()
@@ -99,10 +101,38 @@ def test_bytecode_versioning():
     assert result == 1
     assert len(cache.values) == 1
 
-    @autocache.cached(backend=cache)
+    @bytecode_cached(backend=cache)
     def foo(x):
         return x + 1
 
     result = foo(1)
     assert result == 2
+    assert len(cache.values) == 2
+
+
+@with_setup(cache.clear)
+def test_source_hashing():
+    """
+    Test using source versioning.
+    """
+    @autocache.cached(backend=cache, prefix_generator=source_hash)
+    def foo(x):
+        return x
+
+    result = foo(1)
+    assert result == 1
+    assert len(cache.values) == 1
+
+    foo(1)
+    assert len(cache.values) == 1
+
+    @source_cached(backend=cache)
+    def bar(x):
+        return x
+
+    result = bar(1)
+    assert result == 1
+    assert len(cache.values) == 2
+
+    bar(1)
     assert len(cache.values) == 2

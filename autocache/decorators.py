@@ -1,13 +1,12 @@
 import functools
 
 from autocache.backends import CACHE_MISS
-from autocache.hashing import bytecode_hash, argument_hash
+from autocache.hashing import argument_hash, bytecode_hash, source_hash
 
 
-def cached(backend, **kwargs):
+def cached(backend, prefix_generator=bytecode_hash, **kwargs):
     def decorator(function, set_kwargs=None):
-        # TODO: Make the prefix generator pluggable.
-        prefix = bytecode_hash(function)
+        prefix = prefix_generator(function)
 
         if set_kwargs is None:
             set_kwargs = {}
@@ -29,3 +28,7 @@ def cached(backend, **kwargs):
         return inner
 
     return functools.partial(decorator, **kwargs)
+
+
+bytecode_cached = functools.partial(cached, prefix_generator=bytecode_hash)
+source_cached = functools.partial(cached, prefix_generator=source_hash)

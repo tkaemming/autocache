@@ -24,6 +24,9 @@ as the arguments (including `*args`/`**kwargs`) passed to the cached function.
   PyPy.) In many cases the bytecode will be identical, but not always. Upgrading
   Python versions could result in a variation of the
   [thundering herd problem](http://en.wikipedia.org/wiki/Thundering_herd_problem).
+* Refactoring of control structures may result in different bytecode generation,
+  even if the underlying logic of the function is the same. (For instance,
+  changing an `if`/`else` statement to a ternary statement.)
 * All arguments values must implement the `__hash__` method, and this method
   must be [deterministic](http://en.wikipedia.org/wiki/Deterministic_algorithm)
   between interpreter restarts, etc. This makes it impossible to use lists or
@@ -31,6 +34,12 @@ as the arguments (including `*args`/`**kwargs`) passed to the cached function.
   generation function, or convert the values into a hashable type before calling
   the cache-wrapped function. (Future versions may offer greater support for
   unhashable types.)
+* Some types (specifically, user defined class instances) are hashable, but not
+  deterministic (their hash value evaluates to their `id()` -- in other words,
+  their memory address) which can at worst result in cache misses, and at worst
+  result in hash collisions and invalid results. Please take the time to
+  understand the `__hash__` implementation of argument types that you may be
+  passed to your function.
 
 ## Installation
 

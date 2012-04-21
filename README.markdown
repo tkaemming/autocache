@@ -47,22 +47,24 @@ TODO
 
 For example, caching a function with Django's cache backend:
 
-    from autocache import cached
-    from django.core.cache import cache
+```python
+from autocache import cached
+from django.core.cache import cache
 
-    @cached(backend=cache)
-    def expensive_function(x):
-        return x ** x
+@cached(backend=cache)
+def expensive_function(x):
+    return x ** x
 
-    # This will be invoked, and the result will be stored in cache.
-    expensive_function(10)
+# This will be invoked, and the result will be stored in cache.
+expensive_function(10)
 
-    # This will be served directly from cache.
-    expensive_function(10)
+# This will be served directly from cache.
+expensive_function(10)
 
-    # This will be invoked, and the result will be stored in the cache
-    # as a new value (since `x=100` in this case)
-    expensive_function(100)
+# This will be invoked, and the result will be stored in the cache
+# as a new value (since `x=100` in this case)
+expensive_function(100)
+```
 
 #### Using a user-defined base key
 

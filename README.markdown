@@ -80,7 +80,9 @@ TODO - Providing cache timeout values, etc
 
 TODO
 
-## Contributing — Quickstart
+## Contributing
+
+### Quickstart
 
     # optionally add "-p /usr/local/bin/pypy " argument if you have
     # pypy installed and want to use it
@@ -90,7 +92,18 @@ TODO
     source bin/activate
     git clone git://github.com/tkaemming/autocache.git repo
     cd repo
-    make test
+
+### Running tests
+
+To run the test suite, run `make test` in the repository directory.
+
+### Style guidelines
+
+Please generally follow [PEP8](http://www.python.org/dev/peps/pep-0008/) style
+if you are planning on submitting patches.
+
+Before submitting a patch, please make sure that it passes both pyflakes tests
+and PEP8 checks by running `make check`.
 
 ## License
 

@@ -90,7 +90,7 @@ TODO - Make sure arguments are hashable, refactor out hashed tuple generation, e
 #### Passing additional keyword arguments when setting cache values
 
 To pass additional keyword arguments to the `set` function of the cache backend,
-pass a dictionary to the `set\_kwargs` argument of the decorator.
+pass a dictionary to the `set_kwargs` argument of the decorator.
 
 ```python
 @cached(backend=cache, set_kwargs={'timeout': 5 * 60})

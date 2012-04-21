@@ -12,17 +12,20 @@ versioning.
 * Generation of unique cache keys from hashed argument values, safe to use with
   argument unpacking (`*args`, `**kwargs`) and complex hashable types.
 * Supports in-process memoization out-of-the-box as well as more robust caches,
-  since backends are API compliant with both [Django](Django) as well as
-  [Flask](Flask) and [Werkzeug](Werkzeug). It is also trivial to write your own
-  cache backend if your implementation of choice is not already supported.
+  since backends are API compliant with both
+  [Django](https://docs.djangoproject.com/en/dev/topics/cache/) as well as
+  [Flask](http://flask.pocoo.org/docs/patterns/caching/) and
+  [Werkzeug](http://werkzeug.pocoo.org/docs/contrib/cache/).
+  It is also trivial to write your own cache backend if your implementation of
+  choice is not already supported.
 
 ## Caveats
 
 * All argument values must implement the `__hash__` method, and this method
-  must be [deterministic](deterministic) between interpreter restarts, etc.
-  This makes it impossible to use lists or dictionaries as arguments to a
-  cached function, unless you convert the values into a hashable type before
-  calling the cache-wrapped function.
+  must be [deterministic](http://en.wikipedia.org/wiki/Deterministic_algorithm)
+  between interpreter restarts, etc. This makes it impossible to use lists or
+  dictionaries as arguments to a cached function, unless you convert the values
+  into a hashable type before calling the cache-wrapped function.
 * Some types (specifically, user defined class instances) are hashable, but not
   deterministic (their hash value evaluates to their `id()` -- in other words,
   their memory address) which can at best result in cache misses, and at worst
@@ -143,8 +146,3 @@ MIT Licensed, see `LICENSE` for the full text.
 
 * Ted Kaemming: <https://github.com/tkaemming>
 * Mike Tigas: <https://github.com/mtigas>
-
-[deterministic]: http://en.wikipedia.org/wiki/Deterministic_algorithm
-[Django]: https://docs.djangoproject.com/en/dev/topics/cache/
-[Flask]: http://flask.pocoo.org/docs/patterns/caching/
-[Werkzeug]: http://werkzeug.pocoo.org/docs/contrib/cache/

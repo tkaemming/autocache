@@ -86,14 +86,16 @@ TODO
 
 ### Quickstart
 
-    # optionally add "-p /usr/local/bin/pypy " argument if you have
-    # pypy installed and want to use it
-    virtualenv --no-site-packages autocache
-    cd autocache
-    echo "export PIP_RESPECT_VIRTUALENV=true" >> bin/activate
-    source bin/activate
-    git clone git://github.com/tkaemming/autocache.git repo
-    cd repo
+```bash
+# optionally add "-p /usr/local/bin/pypy " argument if you have
+# pypy installed and want to use it
+virtualenv --no-site-packages autocache
+cd autocache
+echo "export PIP_RESPECT_VIRTUALENV=true" >> bin/activate
+source bin/activate
+git clone git://github.com/tkaemming/autocache.git repo
+cd repo
+```
 
 ### Running tests
 

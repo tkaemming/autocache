@@ -51,7 +51,7 @@ class DummyCacheBackend(LoggingMixin, CacheBackend):
     def get(self, key):
         return CACHE_MISS
 
-    def set(self, key, value):
+    def set(self, key, value, **kwargs):
         pass
 
 

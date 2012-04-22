@@ -12,9 +12,9 @@ versioning.
 * Generation of unique cache keys from hashed argument values, safe to use with
   argument unpacking (`*args`, `**kwargs`) and complex hashable types.
 * Supports in-process memoization out-of-the-box as well as more robust caches,
-  since backends are API compliant with both
-  [Django](https://docs.djangoproject.com/en/dev/topics/cache/) as well as
-  [Flask](http://flask.pocoo.org/docs/patterns/caching/) and
+  since backends are API compliant with
+  [Django](https://docs.djangoproject.com/en/dev/topics/cache/),
+  [Flask](http://flask.pocoo.org/docs/patterns/caching/), and
   [Werkzeug](http://werkzeug.pocoo.org/docs/contrib/cache/).
   It is also trivial to write your own cache backend if your implementation of
   choice is not already supported.
